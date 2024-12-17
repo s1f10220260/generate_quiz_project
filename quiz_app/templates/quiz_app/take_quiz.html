@@ -1,0 +1,9 @@
+<h2>{{ quiz.question }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <label><input type="radio" name="selected_option" value="1" required> {{ quiz.option_1 }}</label><br>
+    <label><input type="radio" name="selected_option" value="2"> {{ quiz.option_2 }}</label><br>
+    <label><input type="radio" name="selected_option" value="3"> {{ quiz.option_3 }}</label><br>
+    <label><input type="radio" name="selected_option" value="4"> {{ quiz.option_4 }}</label><br>
+    <button type="submit">次の問題へ</button>
+</form>

@@ -1,0 +1,38 @@
+<h2>クイズリスト</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>user</th>
+            <th>問題</th>
+            <th>選択肢1</th>
+            <th>選択肢2</th>
+            <th>選択肢3</th>
+            <th>選択肢4</th>
+            <th>正解番号</th>
+            <th>難易度</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for quiz in quizzes %}
+        <tr>
+            <td>{{ quiz.id }}</td>
+            <td>{{ quiz.user.id }}</td>
+            <td>{{ quiz.question }}</td>
+            <td>{{ quiz.option_1 }}</td>
+            <td>{{ quiz.option_2 }}</td>
+            <td>{{ quiz.option_3 }}</td>
+            <td>{{ quiz.option_4 }}</td>
+            <td>{{ quiz.correct_answer }}</td>
+            <td>{{ quiz.difficulty }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11">データがありません。</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'home' %}">ホームへ</a> 

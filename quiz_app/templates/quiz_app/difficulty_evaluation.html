@@ -1,0 +1,47 @@
+<h2>難易度評価</h2>
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>問題</th>
+                <th>あなたの解答</th>
+                <th>正解</th>
+                <th>難易度入力 (1~10)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for response in responses %}
+            <tr>
+                <td>{{ response.quiz.question }}</td>
+                <td>
+                    {% if response.selected_option == 1 %}
+                        {{ response.quiz.option_1 }}
+                    {% elif response.selected_option == 2 %}
+                        {{ response.quiz.option_2 }}
+                    {% elif response.selected_option == 3 %}
+                        {{ response.quiz.option_3 }}
+                    {% elif response.selected_option == 4 %}
+                        {{ response.quiz.option_4 }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if response.quiz.correct_answer == 1 %}
+                        {{ response.quiz.option_1 }}
+                    {% elif response.quiz.correct_answer == 2 %}
+                        {{ response.quiz.option_2 }}
+                    {% elif response.quiz.correct_answer == 3 %}
+                        {{ response.quiz.option_3 }}
+                    {% elif response.quiz.correct_answer == 4 %}
+                        {{ response.quiz.option_4 }}
+                    {% endif %}
+                </td>
+                <td>
+                    <input type="number" name="difficulty" id="difficulty" min="1" max="10" placeholder="1~10" required>  
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">提出</button>
+</form>

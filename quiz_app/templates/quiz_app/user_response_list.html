@@ -1,0 +1,66 @@
+<h2>ユーザーの解答リスト</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ID</th>
+            <th>難易度(GPT)</th>
+            <th>難易度(ユーザー)</th>
+            <th>クイズ</th>
+            <th>選択肢1</th>
+            <th>選択肢2</th>
+            <th>選択肢3</th>
+            <th>選択肢4</th>
+            <th>ユーザーの回答</th>
+            <th>正解</th>
+            <th>正誤</th>
+            <th>作成日時</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for response in responses %}
+        <tr>
+            <td>{{ response.id }}</td>
+            <td>{{ response.user.id }}</td>
+            <td>{{ response.quiz.difficulty}}</td>
+            <td>{{ response.perceived_difficulty }}</td>
+            <td>{{ response.quiz.question }}</td>
+            <td>{{ response.quiz.option_1 }}</td>
+            <td>{{ response.quiz.option_2 }}</td>
+            <td>{{ response.quiz.option_3 }}</td>
+            <td>{{ response.quiz.option_4 }}</td>
+            <td>
+                {% if response.selected_option == 1 %}
+                    {{ response.quiz.option_1 }}
+                {% elif response.selected_option == 2 %}
+                    {{ response.quiz.option_2 }}
+                {% elif response.selected_option == 3 %}
+                    {{ response.quiz.option_3 }}
+                {% elif response.selected_option == 4 %}
+                    {{ response.quiz.option_4 }}
+                {% endif %}
+            </td>
+            <td>
+                {% if response.quiz.correct_answer == 1 %}
+                    {{ response.quiz.option_1 }}
+                {% elif response.quiz.correct_answer == 2 %}
+                    {{ response.quiz.option_2 }}
+                {% elif response.quiz.correct_answer == 3 %}
+                    {{ response.quiz.option_3 }}
+                {% elif response.quiz.correct_answer == 4 %}
+                    {{ response.quiz.option_4 }}
+                {% endif %}
+            </td>
+            <td>{{ response.is_correct|yesno:"o,x" }}</td>
+            <td>{{ response.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11">データがありません。</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'home' %}">ホームへ</a>

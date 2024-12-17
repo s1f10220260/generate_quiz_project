@@ -1,0 +1,15 @@
+<h2>ホーム</h2>
+
+<h3>クイズスタート↓</h3>
+<form method="post" action="{% url 'register_user' %}">
+    {% csrf_token %}
+    <label for="username">user:</label>
+    <input type="text" name="username" id="username" required>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+
+<h3>管理用</h3>
+<a href="{% url 'quiz_list' %}">クイズリスト</a>
+<a href="{% url 'user_response_list' %}">ユーザーの解答リスト</a>
