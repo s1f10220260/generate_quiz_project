@@ -19,6 +19,6 @@ class UserResponse(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) #Userと紐づけ
     selected_option = models.IntegerField()  # ユーザーが選んだ選択肢
     is_correct = models.BooleanField()
-    perceived_difficulty = models.IntegerField(null=True, blank=True)  # ユーザーが感じた難易度 (1-10)
+    perceived_difficulty = models.IntegerField(null=True, blank=True)  # ユーザーが感じた難易度 (1-5)
     session_id = models.CharField(max_length=255, default='', db_index=True)  # セッションIDで回答を紐付け
     created_at = models.DateTimeField(auto_now_add=True)
