@@ -38,7 +38,7 @@ def generate_quiz_batch(request):
     recent_responses = UserResponse.objects.filter(
         session_id=session_id,
         user_id = user_id
-    ).order_by('-created_at')[:10]
+    ).order_by('-created_at')
 
     # 過去の評価データをプロンプトに組み込む
     feedback_text = "\n".join([(
@@ -54,9 +54,9 @@ def generate_quiz_batch(request):
     ) for resp in recent_responses
     ]) if recent_responses else "なし"
 
-    difficulty_list = list(range(1, 11))
+    difficulty_list = list(range(1, 6))
     
-    for _ in range(10):  # 10問生成
+    for _ in range(5):  # 5問生成
         difficulty = random.choice(difficulty_list)  # ランダムに一つ選択
         difficulty_list.remove(difficulty)  # 選択した要素をリストから削除
         
@@ -66,7 +66,7 @@ def generate_quiz_batch(request):
 
         #制約条件:
         ・問題のテーマは「日本史」に限定してください。
-        ・難易度(1~10)を{difficulty}に設定し、それに応じた問題を作成してください。難易度１を簡単な基本問題、難易度１０を難しい応用問題と定義します。
+        ・難易度(1~5)を{difficulty}に設定し、それに応じた問題を作成してください。難易度1を簡単な基本問題、難易度5を難しい応用問題と定義します。
         ・以下の#フィードバックを参考に、問題の難易度や表現を調整してください。ただし、同様の問題は出題しないこと。
         ・歴史的な事実や人物に関しては情報の正確性を最優先してください。
         ・出題の根拠が不明確な選択肢や曖昧な表現を避けてください。
@@ -121,7 +121,7 @@ def take_quiz(request):
         request.session['quiz_iteration'] += 1  # 反復カウンターを増加
         
         # 3セット終了したときの処理
-        if iteration >= 3:  # 3セット終了
+        if iteration >= 5:  # 5セット終了
             return redirect('summary')  # 終了ページへ
         
         # 次のクイズを生成
@@ -149,11 +149,11 @@ def take_quiz(request):
         # 次の問題へ進む
         request.session['current_index'] += 1
         
-        # 10問終了後に自動的にdifficulty_evaluationページに移動
-        if request.session['current_index'] >= 10:
+        # 5問終了後に自動的にdifficulty_evaluationページに移動
+        if request.session['current_index'] >= 5:
             return redirect('difficulty_evaluation')
     
-        # 10問経過していない場合、次の問題へ進む
+        # 5問経過していない場合、次の問題へ進む
         return redirect('take_quiz')
 
     context = {'quiz': quiz}
@@ -178,7 +178,7 @@ def difficulty_evaluation(request):
     session_id = request.session.get('session_id')
     responses = UserResponse.objects.filter(session_id=session_id, perceived_difficulty__isnull=True).annotate(
         correct_answer=F('quiz__correct_answer')
-    ).order_by('id')[:10]
+    ).order_by('id')[:5]
 
     if request.method == 'POST':
         difficulties = request.POST.getlist('difficulty')
